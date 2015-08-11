@@ -2,7 +2,7 @@ class SessionsController < ApplicationController
   def create # #1
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
-      log_in user
+      create_session(user)
       flash[:notice] = "Welcome, #{user.name}!"
       redirect_to root_path
     else
@@ -12,7 +12,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    log_out(current_user)
+    destroy_session(current_user)
     flash[:notice] = "You've been signed out, come back soon!"
     redirect_to root_path
   end
